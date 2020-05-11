@@ -1,14 +1,14 @@
-import React, { useContext } from "react";
+import React from "react";
 import { G, Circle } from "react-native-svg";
-import { LocationContext } from "./TouchHandler";
+import { useTouchLocation } from "./TouchHandler";
 
 export default function ChartPointer({ scaleX, scaleY }) {
-  const { x, y, active } = useContext(LocationContext);
+  const { x, y, active } = useTouchLocation();
 
   return (
     active && (
       <G>
-        <Circle cx={x} cy={y - 60} r={5} fill="black" />
+        <Circle cx={x - 10} cy={y - 50} r={2} fill="black" />
       </G>
     )
   );

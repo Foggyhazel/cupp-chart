@@ -3,7 +3,7 @@ import Svg, { Rect, Path } from "react-native-svg";
 import data from "./data";
 import * as d3 from "d3";
 import prepareMultiFieldData from "./analysis/prepareMultiFieldData";
-import TouchHandler, { HandlerContext } from "./TouchHandler";
+import TouchHandler, { useTouchHandlers } from "./TouchHandler";
 import ChartPointer from "./ChartPointer";
 
 /*
@@ -57,7 +57,7 @@ const LineContent = () => {
     .x((_, i) => x(pd.x[i]))
     .y((d) => y(d));
 
-  const handlers = useContext(HandlerContext);
+  const handlers = useTouchHandlers();
   console.log("render line");
   return (
     <Svg width={width} height={height} {...handlers}>

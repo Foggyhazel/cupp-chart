@@ -1,7 +1,15 @@
-import React, { createContext, useState, useMemo } from "react";
+import React, { createContext, useState, useMemo, useContext } from "react";
 
-export const HandlerContext = createContext();
-export const LocationContext = createContext();
+const HandlerContext = createContext();
+const LocationContext = createContext();
+
+export const useTouchHandlers = () => {
+  return useContext(HandlerContext);
+};
+
+export const useTouchLocation = () => {
+  return useContext(LocationContext);
+};
 
 export default function TouchHandler({ children }) {
   const [loc, setLoc] = useState({ x: 0, y: 0, active: false });
