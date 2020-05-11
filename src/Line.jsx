@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import Svg, { Rect, Path } from "react-native-svg";
 import data from "./data";
 import * as d3 from "d3";
 import prepareMultiFieldData from "./analysis/prepareMultiFieldData";
+import TouchHandler, { HandlerContext } from "./TouchHandler";
+import ChartPointer from "./ChartPointer";
 
 /*
 data = {
@@ -19,7 +21,7 @@ const color = {
   recovered: "green",
 };
 
-export default function Line() {
+const LineContent = () => {
   const width = 400;
   const height = 200;
   // margin of graph area, preserving space for axes
@@ -31,9 +33,9 @@ export default function Line() {
   };
 
   const mock = data["Vietnam"];
-  const cols = ["deaths", "confirmed", "recovered"];
 
-  const pd = prepareMultiFieldData(mock, (d) => new Date(d.date), [
+  const parse = d3.timeParse("%Y-%m-%d");
+  const pd = prepareMultiFieldData(mock, (d) => parse(d.date), [
     "deaths",
     "confirmed",
     "recovered",
@@ -55,17 +57,23 @@ export default function Line() {
     .x((_, i) => x(pd.x[i]))
     .y((d) => y(d));
 
-  const handleTouch = (e) => {
-    console.log(e.nativeEvent.locationX);
-  };
-
-  // tracker idea double layer context one to provide handler the other to hold touch location
+  const handlers = useContext(HandlerContext);
+  console.log("render line");
   return (
-    <Svg width={width} height={height} onTouchStart={handleTouch}>
+    <Svg width={width} height={height} {...handlers}>
       <Rect width="100%" height="100%" stroke="lightgrey" fill="none" />
       {pd.series.map((s, i) => (
         <Path key={i} d={line(s.values)} stroke={color[s.name]} fill="none" />
       ))}
+      <ChartPointer />
     </Svg>
+  );
+};
+
+export default function Line() {
+  return (
+    <TouchHandler>
+      <LineContent />
+    </TouchHandler>
   );
 }
