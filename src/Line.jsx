@@ -1,19 +1,11 @@
-import React, { useContext } from "react";
+import React from "react";
 import Svg, { Rect, Path } from "react-native-svg";
 import data from "./data";
 import * as d3 from "d3";
 import prepareMultiFieldData from "./analysis/prepareMultiFieldData";
 import TouchHandler, { useTouchHandlers } from "./TouchHandler";
 import ChartPointer from "./ChartPointer";
-
-/*
-data = {
-  "country": [
-    {date (yyyy-m-d), confirmed, deaths, recovered }
-    ...
-  ],...
-}
-*/
+import { makeQueryXY1D } from "./analysis/makeTouchQuery";
 
 const color = {
   deaths: "red",
@@ -23,22 +15,23 @@ const color = {
 
 const LineContent = () => {
   const width = 400;
-  const height = 200;
+  const height = 300;
   // margin of graph area, preserving space for axes
   const margin = {
-    top: 10,
+    top: 30,
     left: 20,
     right: 20,
     bottom: 20,
   };
 
-  const mock = data["Vietnam"];
+  const mock = data["Thailand"];
+  console.log(mock.length);
 
   const parse = d3.timeParse("%Y-%m-%d");
   const pd = prepareMultiFieldData(mock, (d) => parse(d.date), [
     "deaths",
-    "confirmed",
     "recovered",
+    "confirmed",
   ]);
 
   const x = d3
@@ -58,6 +51,15 @@ const LineContent = () => {
     .y((d) => y(d));
 
   const handlers = useTouchHandlers();
+
+  const queryXY = makeQueryXY1D(
+    pd,
+    (d) => d.x,
+    (d, ix) => d.series.map((s) => s.values[ix]),
+    x,
+    y
+  );
+
   console.log("render line");
   return (
     <Svg width={width} height={height} {...handlers}>
@@ -65,7 +67,7 @@ const LineContent = () => {
       {pd.series.map((s, i) => (
         <Path key={i} d={line(s.values)} stroke={color[s.name]} fill="none" />
       ))}
-      <ChartPointer />
+      <ChartPointer query={queryXY} />
     </Svg>
   );
 };

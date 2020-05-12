@@ -8,6 +8,8 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "d3": "^5.16.0",
+    "d3-array": "^2.4.0",
     "expo": "~37.0.3",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
