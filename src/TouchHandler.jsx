@@ -15,7 +15,7 @@ export const useTouchHandlers = () => {
 /**
  * Use inside TouchHandler context.
  * Return touch location inside element that generate touch event
- * @return {{x: number, y:number, active: boolean}}
+ * @return {{x: number, y:number, active: boolean}} touch info
  */
 export const useTouchLocation = () => {
   return useContext(LocationContext);

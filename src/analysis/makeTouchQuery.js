@@ -9,6 +9,16 @@ import nearIndex from "./nearIndex";
  */
 
 /**
+ * @typedef {Object} XYTouchQueryResult
+ * @property {TouchQueryResult} x  - query result obtained from x data
+ * @property {TouchQueryResult} y  - - query result obtained from y data
+ */
+
+/**
+ * @typedef {(x: number, y: number) => XYTouchQueryResult} TouchQueryFunction2D
+ */
+
+/**
  * return index of nearest point in a sorted array
  * @param {Array<any>} data
  * @param {Function} getAllX
@@ -29,7 +39,7 @@ export function makeQuery1D(data, getAllX, scale) {
 }
 
 /**
- * @returns {(x:number,y:number) => {x: TouchQueryResult, y: TouchQueryResult}} function to query data with (x,y) touch
+ * @returns {TouchQueryFunction2D} function to query data with (x,y) touch
  * position with 1D search
  */
 export function makeQueryXY1D(data, getAllX, getMatchedY, scaleX, scaleY) {
