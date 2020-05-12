@@ -1,4 +1,3 @@
-import * as d3 from "d3";
 import nearIndex from "./nearIndex";
 
 /**
@@ -28,7 +27,6 @@ import nearIndex from "./nearIndex";
 export function makeQuery1D(data, getAllX, scale) {
   return (locationX) => {
     const X = getAllX(data);
-    // const idx = d3.bisectLeft(X, scale.invert(locationX));
     const idx = nearIndex(X, scale.invert(locationX));
     return {
       index: idx,
@@ -48,7 +46,6 @@ export function makeQueryXY1D(data, getAllX, getMatchedY, scaleX, scaleY) {
     const x_result = xQuery(x);
     const ix = x_result.index;
     const matched_Y = getMatchedY(data, ix);
-    // const iy = minIndex(matched_Y, (d) => Math.abs(d - scaleY.invert(y)));
     const iy = nearIndex(matched_Y, scaleY.invert(y), null, true);
 
     return {
