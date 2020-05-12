@@ -1,12 +1,19 @@
 import * as d3 from "d3";
-import { minIndex } from "d3-array/src";
 import nearIndex from "./nearIndex";
 
 /**
+ * @typedef {Object} TouchQueryResult
+ * @property {number} index     - index of nearest data
+ * @property {number} location  - location of nearest data in element space
+ * @property {any} value         - value of nearest data
+ */
+
+/**
  * return index of nearest point in a sorted array
- * @param {*} data
- * @param {*} getAllX
- * @param {d3.ScaleLinear} scale
+ * @param {Array<any>} data
+ * @param {Function} getAllX
+ * @param {d3.ScaleContinuousNumeric} scale
+ * @returns {(x: number, y: number) => TouchQueryResult}
  */
 export function makeQuery1D(data, getAllX, scale) {
   return (locationX) => {
@@ -21,15 +28,10 @@ export function makeQuery1D(data, getAllX, scale) {
   };
 }
 
-export function composeQuery(xQuery, yQuery) {
-  return (locationX, locationY) => {
-    return {
-      x: xQuery(locationX),
-      y: yQuery(locationY),
-    };
-  };
-}
-
+/**
+ * @returns {(x:number,y:number) => {x: TouchQueryResult, y: TouchQueryResult}} function to query data with (x,y) touch
+ * position with 1D search
+ */
 export function makeQueryXY1D(data, getAllX, getMatchedY, scaleX, scaleY) {
   const xQuery = makeQuery1D(data, getAllX, scaleX);
   return (x, y) => {
