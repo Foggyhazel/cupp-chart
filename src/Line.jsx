@@ -7,6 +7,7 @@ import TouchHandler, { useTouchHandlers } from "./TouchHandler";
 import ChartPointer from "./ChartPointer";
 import { makeQueryXY1D } from "./analysis/makeTouchQuery";
 import TouchQuery from "./TouchQuery";
+import MultiSeries from "./MultiSeries";
 
 const color = {
   deaths: "red",
@@ -64,10 +65,21 @@ const LineContent = () => {
   return (
     <Svg width={width} height={height} {...handlers}>
       <Rect width="100%" height="100%" stroke="lightgrey" fill="none" />
-      {pd.series.map((s, i) => (
-        <Path key={i} d={line(s.values)} stroke={color[s.name]} fill="none" />
-      ))}
       <TouchQuery query={queryXY} offsetY={-20} offsetX={-20}>
+        <MultiSeries
+          replaceProps={(i, a) => (i == a ? { stroke: "purple" } : null)}
+        >
+          <View />
+          {pd.series.map((s, i) => (
+            <Path
+              key={i}
+              d={line(s.values)}
+              stroke={color[s.name]}
+              fill="none"
+              strokeWidth={10}
+            />
+          ))}
+        </MultiSeries>
         <ChartPointer />
       </TouchQuery>
     </Svg>
