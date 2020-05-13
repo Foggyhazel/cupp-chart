@@ -27,7 +27,6 @@ const LineContent = () => {
   };
 
   const mock = data["Thailand"];
-  console.log(mock.length);
 
   const parse = d3.timeParse("%Y-%m-%d");
   const pd = prepareMultiFieldData(mock, (d) => parse(d.date), [
