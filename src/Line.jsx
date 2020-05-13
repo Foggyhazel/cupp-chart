@@ -67,16 +67,19 @@ const LineContent = () => {
       <Rect width="100%" height="100%" stroke="lightgrey" fill="none" />
       <TouchQuery query={queryXY} offsetY={-20} offsetX={-20}>
         <MultiSeries
-          replaceProps={(i, a) => (i == a ? { stroke: "purple" } : null)}
+          replaceProps={(i, a) =>
+            i == a
+              ? { stroke: "blue" }
+              : { stroke: "black", strokeOpacity: 0.2 }
+          }
         >
-          <View />
           {pd.series.map((s, i) => (
             <Path
               key={i}
               d={line(s.values)}
               stroke={color[s.name]}
               fill="none"
-              strokeWidth={10}
+              strokeWidth={2}
             />
           ))}
         </MultiSeries>

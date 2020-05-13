@@ -1,6 +1,7 @@
 import React from "react";
 import { useTouchQuery } from "./TouchQuery";
 import { useTouchLocation } from "./TouchHandler";
+import { G } from "react-native-svg";
 
 /**
  * @typedef {import("./analysis/makeTouchQuery").XYTouchQueryResult} XYTouchQueryResult
@@ -32,9 +33,15 @@ export default function MultiSeries({
 }) {
   const { x, y } = useTouchQuery();
   const { active } = useTouchLocation();
+
   const activeIndex = active ? y.index : undefined;
+
   const renderChildren = () => {
+    // I don't know why but it will freeze touch handling
+    // if (!active) return children;
+
     let child_arr = React.Children.map(children, (c, i) => {
+      if (!active) return c;
       const r = replaceProps(i, activeIndex, { x, y });
       if (r && typeof r === "object" && Object.keys(r).length > 0) {
         return React.cloneElement(c, r);
@@ -43,7 +50,7 @@ export default function MultiSeries({
       }
     });
 
-    if (raiseActive && activeIndex !== undefined) {
+    if (active && raiseActive) {
       return [
         ...child_arr.filter((_, i) => i != activeIndex),
         child_arr[activeIndex],
