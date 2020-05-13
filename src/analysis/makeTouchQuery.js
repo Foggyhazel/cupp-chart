@@ -2,15 +2,15 @@ import nearIndex from "./nearIndex";
 
 /**
  * @typedef {Object} TouchQueryResult
- * @property {number} index     - index of nearest data
- * @property {number} location  - location of nearest data in element space
- * @property {any} value         - value of nearest data
+ * @property {number} index     Index of nearest data
+ * @property {number} location  Location of nearest data in element space
+ * @property {any} value        Value of nearest data
  */
 
 /**
  * @typedef {Object} XYTouchQueryResult
- * @property {TouchQueryResult} x  - query result obtained from x data
- * @property {TouchQueryResult} y  - - query result obtained from y data
+ * @property {TouchQueryResult} x  Query result obtained from x data
+ * @property {TouchQueryResult} y  Query result obtained from y data
  */
 
 /**
