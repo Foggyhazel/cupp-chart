@@ -20,7 +20,7 @@ import { G } from "react-native-svg";
  *
  * @typedef {Object} Props
  * @property {FnReplaceProps=} Props.replaceProps   Callback taking child index, query result
- *                                                  - Return an object mapping from prop_to_override -> value
+ *                                                  - Return an object mapping from prop_to_override → value
  *                                                  - Return false, null or undefined to not override
  * @property {boolean=} raiseActive                 Raise active series to the top ?
  *
