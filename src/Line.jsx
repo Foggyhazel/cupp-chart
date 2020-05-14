@@ -8,11 +8,12 @@ import ChartPointer from "./ChartPointer";
 import { makeQueryXY1D } from "./analysis/makeTouchQuery";
 import TouchQuery from "./TouchQuery";
 import MultiSeries from "./MultiSeries";
+import ChartAxis from "./ChartAxis";
 
 const color = {
-  deaths: "red",
-  confirmed: "blue",
-  recovered: "green",
+  deaths: "steelblue",
+  confirmed: "steelblue",
+  recovered: "steelblue",
 };
 
 const LineContent = () => {
@@ -20,10 +21,10 @@ const LineContent = () => {
   const height = 300;
   // margin of graph area, preserving space for axes
   const margin = {
-    top: 30,
-    left: 20,
-    right: 20,
-    bottom: 20,
+    top: 40,
+    left: 40,
+    right: 40,
+    bottom: 40,
   };
 
   const mock = data["Thailand"];
@@ -61,16 +62,14 @@ const LineContent = () => {
     y
   );
 
+  const format = d3.timeFormat("%b");
+
   return (
     <Svg width={width} height={height} {...handlers}>
       <Rect width="100%" height="100%" stroke="lightgrey" fill="none" />
       <TouchQuery query={queryXY} offsetY={-20} offsetX={-20}>
         <MultiSeries
-          replaceProps={(i, a) =>
-            i == a
-              ? { stroke: "blue" }
-              : { stroke: "black", strokeOpacity: 0.2 }
-          }
+          replaceProps={(i, a) => (i == a ? null : { stroke: "#ddd" })}
         >
           {pd.series.map((s, i) => (
             <Path
@@ -78,12 +77,20 @@ const LineContent = () => {
               d={line(s.values)}
               stroke={color[s.name]}
               fill="none"
-              strokeWidth={2}
+              strokeWidth={1.5}
             />
           ))}
         </MultiSeries>
         <ChartPointer />
       </TouchQuery>
+      <ChartAxis side="left" scale={y} offsetX={margin.left} />
+      <ChartAxis
+        side="bottom"
+        scale={x}
+        offsetY={height - margin.bottom}
+        tickFormat={format}
+        tickArguments={[d3.timeMonth]}
+      />
     </Svg>
   );
 };
