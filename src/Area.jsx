@@ -11,12 +11,12 @@ import MultiSeries from "./MultiSeries";
 import ChartAxis from "./ChartAxis";
 
 const color = {
-  deaths: "steelblue",
-  confirmed: "steelblue",
-  recovered: "steelblue",
+  deaths: "red",
+  confirmed: "green",
+  recovered: "blue",
 };
 
-const LineContent = () => {
+const AreaContent = () => {
   const width = 400;
   const height = 250;
   // margin of graph area, preserving space for axes
@@ -31,9 +31,9 @@ const LineContent = () => {
 
   const parse = d3.timeParse("%Y-%m-%d");
   const pd = prepareMultiFieldData(mock, (d) => parse(d.date), [
-    "deaths",
-    "recovered",
     "confirmed",
+    "recovered",
+    "deaths",
   ]);
 
   const x = d3
@@ -47,10 +47,11 @@ const LineContent = () => {
     .range([height - margin.bottom, margin.top])
     .nice();
 
-  const line = d3
-    .line()
+  const area = d3
+    .area()
     .x((_, i) => x(pd.x[i]))
-    .y((d) => y(d));
+    .y0(y(0))
+    .y1((d) => y(d));
 
   const handlers = useTouchHandlers();
 
@@ -69,15 +70,15 @@ const LineContent = () => {
       <Rect width="100%" height="100%" stroke="lightgrey" fill="none" />
       <TouchQuery query={queryXY} offsetY={-20} offsetX={-20}>
         <MultiSeries
-          replaceProps={(i, a) => (i == a ? null : { stroke: "#ddd" })}
+          replaceProps={(i, a) => (i == a ? null : { fill: "#ddd" })}
         >
           {pd.series.map((s, i) => (
             <Path
               key={i}
-              d={line(s.values)}
-              stroke={color[s.name]}
-              fill="none"
-              strokeWidth={1.5}
+              d={area(s.values)}
+              stroke="none"
+              fill={color[s.name]}
+              fillOpacity={0.4}
             />
           ))}
         </MultiSeries>
@@ -95,10 +96,10 @@ const LineContent = () => {
   );
 };
 
-export default function Line() {
+export default function Area() {
   return (
     <TouchHandler>
-      <LineContent />
+      <AreaContent />
     </TouchHandler>
   );
 }

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Line from "./src/Line";
+import Area from "./src/Area";
 
 export default function App() {
   const [state, setState] = useState("rest");
@@ -9,6 +10,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Line />
+      <Area />
     </View>
   );
 }
