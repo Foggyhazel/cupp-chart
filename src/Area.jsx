@@ -26,15 +26,17 @@ const AreaContent = () => {
     right: 40,
     bottom: 40,
   };
+  const stack = true;
 
   const mock = data["Thailand"];
 
   const parse = d3.timeParse("%Y-%m-%d");
-  const pd = prepareMultiFieldData(mock, (d) => parse(d.date), [
-    "confirmed",
-    "recovered",
-    "deaths",
-  ]);
+  const pd = prepareMultiFieldData(
+    mock,
+    (d) => parse(d.date),
+    ["deaths", "confirmed", "recovered"],
+    true
+  );
 
   const x = d3
     .scaleTime()
@@ -47,18 +49,29 @@ const AreaContent = () => {
     .range([height - margin.bottom, margin.top])
     .nice();
 
-  const area = d3
-    .area()
-    .x((_, i) => x(pd.x[i]))
-    .y0(y(0))
-    .y1((d) => y(d));
+  let area;
+  if (stack) {
+    area = d3
+      .area()
+      .x((_, i) => x(pd.x[i]))
+      .y0((d) => y(d[0]))
+      .y1((d) => y(d[1]));
+  } else {
+    area = d3
+      .area()
+      .x((_, i) => x(pd.x[i]))
+      .y0(y(0))
+      .y1((d) => y(d));
+  }
 
   const handlers = useTouchHandlers();
 
   const queryXY = makeQueryXY1D(
     pd,
     (d) => d.x,
-    (d, ix) => d.series.map((s) => s.values[ix]),
+    stack
+      ? (d, ix) => d.series.map((s) => s.stack[ix][1])
+      : (d, ix) => d.series.map((s) => s.values[ix]),
     x,
     y
   );
@@ -75,7 +88,7 @@ const AreaContent = () => {
           {pd.series.map((s, i) => (
             <Path
               key={i}
-              d={area(s.values)}
+              d={area(stack ? s.stack : s.values)}
               stroke="none"
               fill={color[s.name]}
               fillOpacity={0.4}
