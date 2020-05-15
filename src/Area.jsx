@@ -35,7 +35,8 @@ const AreaContent = () => {
     mock,
     (d) => parse(d.date),
     ["deaths", "confirmed", "recovered"],
-    true
+    true,
+    d3.stackOrderAscending
   );
 
   const x = d3

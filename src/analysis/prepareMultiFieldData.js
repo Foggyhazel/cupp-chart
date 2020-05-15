@@ -54,8 +54,8 @@ export default function prepareMultiFieldData(
 
   if (do_stack) {
     domainY = [
-      d3.min(stack[0], (s) => s[0]),
-      d3.max(stack[stack.length - 1], (s) => s[1]),
+      d3.min(stack, (s) => d3.min(s, (d) => d[0])),
+      d3.max(stack, (s) => d3.max(s, (d) => d[1])),
     ];
   } else {
     domainY = [
