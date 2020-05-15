@@ -49,20 +49,11 @@ const AreaContent = () => {
     .range([height - margin.bottom, margin.top])
     .nice();
 
-  let area;
-  if (stack) {
-    area = d3
-      .area()
-      .x((_, i) => x(pd.x[i]))
-      .y0((d) => y(d[0]))
-      .y1((d) => y(d[1]));
-  } else {
-    area = d3
-      .area()
-      .x((_, i) => x(pd.x[i]))
-      .y0(y(0))
-      .y1((d) => y(d));
-  }
+  const area = d3
+    .area()
+    .x((_, i) => x(pd.x[i]))
+    .y0(stack ? (d) => y(d[0]) : y(0))
+    .y1(stack ? (d) => y(d[1]) : (d) => y(d));
 
   const handlers = useTouchHandlers();
 
